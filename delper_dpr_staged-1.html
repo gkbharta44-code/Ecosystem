@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delper GCCP Holdings — Detailed Project Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F4EE; --card:#FFFFFF; --ink:#1A1A1A; --muted:#5A5A5A;
+    --green:#1E7A3C; --green-soft:rgba(30,122,60,.08);
+    --red:#A63D2F; --red-soft:rgba(166,61,47,.08);
+    --amber:#8A6520; --amber-soft:rgba(138,101,32,.09);
+    --blue:#3466a8; --blue-soft:rgba(52,102,148,.09);
+    --line:#DAD5C8;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",-apple-system,sans-serif; font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased; }
+  .mono{ font-family:"IBM Plex Mono",monospace; }
+  .doc-strip{ background:var(--ink); color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; padding:10px 32px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; position:sticky; top:0; z-index:10; }
+  .doc-strip span{ opacity:.7; }
+  .wrap{ max-width:920px; margin:0 auto; padding:0 32px; }
+
+  header{ padding:48px 0 32px; border-bottom:1px solid var(--line); }
+  .eyebrow{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  h1{ font-family:"Newsreader",serif; font-weight:600; font-size:clamp(1.8rem,4.2vw,2.4rem); margin:0 0 8px; letter-spacing:-.01em; }
+  .subtitle{ font-family:"Newsreader",serif; font-style:italic; font-size:1.05rem; color:var(--muted); margin:0 0 20px; }
+  p.lede{ color:var(--muted); font-size:.92rem; max-width:780px; line-height:1.75; margin:0 0 10px; }
+
+  /* Stage navigator */
+  .nav-strip{ display:flex; flex-wrap:wrap; gap:6px; margin-top:22px; }
+  .nav-pill{ font-family:"IBM Plex Mono",monospace; font-size:.62rem; padding:5px 10px; border-radius:20px; background:var(--card); border:1px solid var(--line); color:var(--muted); text-decoration:none; }
+
+  section{ padding:34px 0; border-bottom:1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+  .stage-eyebrow{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .stage-num{ width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:"IBM Plex Mono",monospace; font-size:.72rem; font-weight:700; color:#fff; background:var(--ink); flex-shrink:0; }
+  .stage-label{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  h2{ font-family:"Newsreader",serif; font-weight:600; font-size:1.4rem; margin:0 0 14px; }
+  p.body-text{ font-size:.9rem; color:var(--ink); line-height:1.75; margin:0 0 14px; max-width:780px; }
+  p.body-text.warn{ font-style:italic; padding:12px 16px; background:var(--amber-soft); border-left:3px solid var(--amber); color:var(--ink); }
+  p.body-text.flag{ font-style:italic; padding:12px 16px; background:var(--red-soft); border-left:3px solid var(--red); color:var(--ink); }
+
+  /* KPI grid */
+  .kpi-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); margin:16px 0; }
+  .kpi{ background:var(--card); padding:14px 14px; }
+  .kpi .num{ font-family:"Newsreader",serif; font-weight:700; font-size:1.25rem; color:var(--green); line-height:1.1; }
+  .kpi .num.r{ color:var(--red); }
+  .kpi .num.a{ color:var(--amber); }
+  .kpi .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.6rem; letter-spacing:.03em; text-transform:uppercase; color:var(--muted); margin-top:6px; line-height:1.35; }
+
+  table{ width:100%; border-collapse:collapse; font-size:.84rem; margin:12px 0; }
+  thead th{ font-family:"IBM Plex Mono",monospace; font-size:.6rem; letter-spacing:.05em; text-transform:uppercase; text-align:left; padding:9px 12px; background:var(--ink); color:var(--paper); font-weight:600; }
+  tbody td{ padding:9px 12px; border-bottom:1px solid var(--line); }
+  tbody tr:nth-child(odd){ background:var(--card); }
+  td.num{ font-family:"IBM Plex Mono",monospace; text-align:right; white-space:nowrap; }
+  .g{ color:var(--green); font-weight:600; } .r{ color:var(--red); font-weight:600; } .a{ color:var(--amber); font-weight:600; }
+
+  .swot-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin:16px 0; }
+  .swot-cell{ background:var(--card); padding:16px 18px; }
+  .swot-cell h4{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; margin:0 0 8px; }
+  .swot-cell ul{ margin:0; padding-left:18px; font-size:.82rem; line-height:1.6; }
+
+  footer{ padding:36px 0 56px; }
+  footer p{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; color:var(--muted); text-align:center; line-height:1.8; margin:0; }
+
+  @media (max-width:600px){ .swot-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<div class="doc-strip">
+  <span>Delper GCCP Holdings</span>
+  <span>Detailed Project Report · Not for Distribution</span>
+</div>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Detailed Project Report</div>
+  <h1>Delper Smart City &amp; Digital Ecosystem Programme</h1>
+  <p class="subtitle">Staged corporate development plan — pre-seed through concurrent global capital raise</p>
+  <p class="lede">This report follows the actual sequence of corporate development, in the order capital is raised and deployed — not a generic template order. Each stage states its capital requirement, purpose, KPIs, and the financial ratios relevant at that stage. Figures marked with a caution note reflect findings from independent reconciliation work; figures without a note are drawn directly from Delper's v10.3 financial model.</p>
+  <div class="nav-strip">
+    <a class="nav-pill" href="#s1">1. Pre-Seed</a>
+    <a class="nav-pill" href="#s2">2. Seed</a>
+    <a class="nav-pill" href="#s3">3. SG HoldCo</a>
+    <a class="nav-pill" href="#s4">4. PwC Audit</a>
+    <a class="nav-pill" href="#s5">5. AWS Infra</a>
+    <a class="nav-pill" href="#s6">6. Digital</a>
+    <a class="nav-pill" href="#s7">7. Supply Chain</a>
+    <a class="nav-pill" href="#s8">8. Quantum</a>
+    <a class="nav-pill" href="#s9">9. Capital Raise</a>
+    <a class="nav-pill" href="#tokenomics">Tokenomics</a>
+    <a class="nav-pill" href="#ratios">Ratios</a>
+    <a class="nav-pill" href="#swot">SWOT</a>
+  </div>
+</header>
+
+<section id="s1">
+  <div class="stage-eyebrow"><div class="stage-num">1</div><div class="stage-label">Pre-Seed Capital</div></div>
+  <h2>$5.0M — Company Formation &amp; Concept Validation</h2>
+  <p class="body-text">Funds company incorporation, founding team costs, legal and advisory fees, initial platform architecture, and concept validation ahead of seed-stage fundraising. This stage precedes any revenue generation.</p>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">$5.0M</div><div class="lbl">Capital Raised</div></div>
+    <div class="kpi"><div class="num">18–24</div><div class="lbl">Months Runway</div></div>
+    <div class="kpi"><div class="num">$208–278K</div><div class="lbl">Monthly Burn Rate</div></div>
+    <div class="kpi"><div class="num">0</div><div class="lbl">Revenue (Pre-Revenue Stage)</div></div>
+  </div>
+  <p class="body-text">Milestones to seed: founding team assembled, corporate structure designed, initial technical architecture (digital platform + smart city framework) documented, and seed-stage investor pipeline established.</p>
+</section>
+
+<section id="s2">
+  <div class="stage-eyebrow"><div class="stage-num">2</div><div class="stage-label">Seed Capital</div></div>
+  <h2>$66.5M — Team Scale-Up &amp; Market Entry Preparation</h2>
+  <p class="body-text">Raised in conjunction with procurement of a second $125M SBLC facility (per the Investor Pitch Deck, Months 4–10). Funds team scaling, MVP development for the digital platform, and initial market entry preparation — including a planned 1,000,000-user onboarding pipeline in India.</p>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">$66.5M</div><div class="lbl">Seed Capital</div></div>
+    <div class="kpi"><div class="num">$71.5M</div><div class="lbl">Cumulative Capital to Date</div></div>
+    <div class="kpi"><div class="num">1.0M</div><div class="lbl">Target Users (India Pipeline)</div></div>
+    <div class="kpi"><div class="num">6 mo</div><div class="lbl">Onboarding Window</div></div>
+  </div>
+  <p class="body-text warn">Note: this seed round is tied to SBLC procurement — a bank instrument, not cash equity. Availability and timing of the second SBLC should be confirmed as a condition of this stage, not assumed.</p>
+</section>
+
+<section id="s3">
+  <div class="stage-eyebrow"><div class="stage-num">3</div><div class="stage-label">Corporate Structure</div></div>
+  <h2>Singapore Holding Company Incorporation</h2>
+  <p class="body-text">Delper GCCP Holdings Pte Ltd incorporated in Singapore as the ultimate holding entity, providing a stable, internationally-recognized jurisdiction for capital raising, sovereign guarantee negotiation, and the token/equity structure described in later stages.</p>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">SG</div><div class="lbl">Jurisdiction</div></div>
+    <div class="kpi"><div class="num">100%</div><div class="lbl">GK Bharta Founder Ownership (Pre-Dilution)</div></div>
+    <div class="kpi"><div class="num">30%</div><div class="lbl">Founder Equity Floor (Post-FPO)</div></div>
+    <div class="kpi"><div class="num">60</div><div class="lbl">Planned Country SPV Entities</div></div>
+  </div>
+  <p class="body-text">Governance: single holding company with country-level SPV subsidiaries for each smart city jurisdiction, ring-fencing project-level debt (SBLC, MTN) from corporate-level obligations — consistent with the capital structure detailed in Stage 9.</p>
+</section>
+
+<section id="s4">
+  <div class="stage-eyebrow"><div class="stage-num">4</div><div class="stage-label">Independent Verification</div></div>
+  <h2>Appointment of PwC — Full Drop-Down Due Diligence on Delper v10.3</h2>
+  <p class="body-text">A Big Four independent audit firm is appointed to conduct comprehensive due diligence on the entire v10.3 financial model prior to any institutional capital raise — the step this programme's internal reconciliation work (extensive, but self-prepared) cannot substitute for.</p>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">$8–15M</div><div class="lbl">Estimated Engagement Cost</div></div>
+    <div class="kpi"><div class="num">4–6 mo</div><div class="lbl">Estimated Duration</div></div>
+    <div class="kpi"><div class="num">21</div><div class="lbl">Statements Under Review (CMA Y1–Y21)</div></div>
+  </div>
+  <p class="body-text flag">Known items PwC's scope should specifically address, based on internal reconciliation to date: (1) digital ad income ($10.62T/yr terminal) checked against real-world digital ad markets and found to require unprecedented global market share — independent verification of achievable revenue is required before this figure is used in any credit application; (2) supply chain income implies capturing 13.2% of world GDP in facilitation fees, versus real-world comparables (Visa: 0.033% of GDP after 65 years) — requires independent scoping to a defensible figure; (3) zero of 60 target sovereign guarantees are currently executed; (4) the smart city rental yield (13% p.a.) sits above real-world commercial real estate benchmarks (4–8% prime, 8–12% higher-risk) and should be independently benchmarked; (5) City Timeline documentation currently names 456 of 2,200 planned smart cities by specific location.</p>
+</section>
+
+<section id="s5">
+  <div class="stage-eyebrow"><div class="stage-num">5</div><div class="stage-label">Technology Infrastructure</div></div>
+  <h2>AWS Cloud Infrastructure Build-Out</h2>
+  <p class="body-text">Cloud infrastructure supporting the digital platform (ad serving, user wallets, KYC verification) and, at later stages, smart city IoT and building management systems.</p>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">Multi-AZ</div><div class="lbl">Architecture</div></div>
+    <div class="kpi"><div class="num">99.95%</div><div class="lbl">Target Uptime SLA</div></div>
+    <div class="kpi"><div class="num">6B</div><div class="lbl">Target User Capacity (Terminal)</div></div>
+    <div class="kpi"><div class="num">Y1</div><div class="lbl">Scales With User Onboarding</div></div>
+  </div>
+  <p class="body-text">Infrastructure scales with actual user growth (Stage 6) rather than being provisioned upfront for terminal-scale (6B users) capacity — reducing pre-revenue fixed cost commitment.</p>
+</section>
+
+<section id="s6">
+  <div class="stage-eyebrow"><div class="stage-num">6</div><div class="stage-label">Revenue Launch — Digital</div></div>
+  <h2>Digital Advertising &amp; Survey Platform Launch</h2>
+  <p class="body-text">Platform launch generating ad and survey revenue, funding user DPR wallet credits. Growth trajectory anchored to real-world platform scale-up precedent (ByteDance/TikTok-pace early growth, tapering to sustainable rates) rather than the flat terminal figure used in v10.3's headline model.</p>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">$5.0B</div><div class="lbl">Year 1 Revenue</div></div>
+    <div class="kpi"><div class="num">$69.0B</div><div class="lbl">Year 4 Revenue</div></div>
+    <div class="kpi a"><div class="num a">$2.64T</div><div class="lbl">Year 11 Ceiling (Realistic)</div></div>
+    <div class="kpi"><div class="num">150%→10%</div><div class="lbl">CAGR Taper, Yr 1–20</div></div>
+  </div>
+  <p class="body-text flag">The v10.3 model's flat $10.62T/yr terminal figure requires capturing 14.4× the entire current global digital ad industry — not achievable at any point on a realistic growth curve, including Year 21. Use the $2.64T realistic ceiling (Year 11) for any financing calculation; treat $10.62T as an aspirational, unverified figure only.</p>
+</section>
+
+<section id="s7">
+  <div class="stage-eyebrow"><div class="stage-num">7</div><div class="stage-label">Revenue Launch — Supply Chain</div></div>
+  <h2>Supply Chain Facilitation Platform Launch</h2>
+  <p class="body-text">Facilitation and profit-share revenue on ecosystem trade flow, launched alongside the digital platform.</p>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">$32T</div><div class="lbl">Total Global Retail (Addressable)</div></div>
+    <div class="kpi a"><div class="num a">$3.20T</div><div class="lbl">Realistic Ceiling (10% Commission)</div></div>
+    <div class="kpi r"><div class="num r">$13.86T</div><div class="lbl">v10.3 Terminal Figure (Unverified)</div></div>
+    <div class="kpi"><div class="num">13.2%</div><div class="lbl">Implied Share of World GDP (v10.3 figure)</div></div>
+  </div>
+  <p class="body-text flag">$13.86T/yr implies capturing 13.2% of all global economic output — 396× Visa's entire revenue, despite Visa processing the majority of global card transactions after 65 years of operation. A realistic ceiling, benchmarked against real-world marketplace commission rates (Amazon-style, 8–10% of GMV) applied to total addressable global retail, is approximately $3.20T/yr at full market maturity.</p>
+</section>
+
+<section id="s8">
+  <div class="stage-eyebrow"><div class="stage-num">8</div><div class="stage-label">Technology Infrastructure</div></div>
+  <h2>Quantum Computing Installation</h2>
+  <p class="body-text">Quantum computing capacity installed to support platform security (IAH — Identity Authentication Hub), fraud detection, and optimization across the digital and supply chain platforms.</p>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">$883M</div><div class="lbl">Annual Cost</div></div>
+    <div class="kpi"><div class="num">IAH</div><div class="lbl">Primary Use Case</div></div>
+    <div class="kpi"><div class="num">100%</div><div class="lbl">KYC-Verified User Coverage (Target)</div></div>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="stage-eyebrow"><div class="stage-num">9</div><div class="stage-label">Capital Raising</div></div>
+  <h2>Concurrent Capital Raise — 195-Country Pilot &amp; 4,400-City Full Programme</h2>
+  <p class="body-text">Per the established Phase 1/Phase 2 concurrency: the 195-country pilot (one right-sized city per country, sized to each government's realistic guarantee capacity) and the full 4,400-city programme (2,200 smart cities + 2,200 retrofit cities) are raised and executed <strong>side by side</strong>, not sequentially — Phase 1 does not delay Phase 2's timeline, and Phase 2 is not contingent on Phase 1 completing first.</p>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">$2.904T</div><div class="lbl">Phase 1: 195-Country Pilot</div></div>
+    <div class="kpi"><div class="num">$1,348.05T</div><div class="lbl">Phase 2: 4,400-City Programme</div></div>
+    <div class="kpi"><div class="num">$1,350.95T</div><div class="lbl">Combined Capital Raise</div></div>
+    <div class="kpi"><div class="num">195 + 1</div><div class="lbl">Sovereign Guarantee Counterparties</div></div>
+  </div>
+  <table>
+    <thead><tr><th>Component</th><th>Amount</th><th>Structure</th></tr></thead>
+    <tbody>
+      <tr><td>Phase 1 — 195 pilot guarantees (95% LTV)</td><td class="num g">$2.759T</td><td>195 separate sovereign guarantees, one per country</td></tr>
+      <tr><td>Phase 1 — sponsor equity (5%)</td><td class="num">$0.145T</td><td>Delper GCCP Holdings</td></tr>
+      <tr><td>Phase 2 — Smart City SBLC (2,200 cities)</td><td class="num g">$640.2T</td><td>Consolidated FSG sovereign guarantee, 1.8%, 25yr</td></tr>
+      <tr><td>Phase 2 — Retrofit MTN (2,200 cities)</td><td class="num g">$674.3T</td><td>Sovereign-guaranteed MTN, 25yr</td></tr>
+      <tr><td>Phase 2 — IPO/FPO equity + ESG Bond</td><td class="num">$155.0T</td><td>$150T equity + $5T ESG Bond</td></tr>
+    </tbody>
+  </table>
+  <p class="body-text flag">Zero of the 195 Phase 1 guarantees and zero of the Phase 2 sovereign guarantees are executed as of this report. This stage's capital figures represent the financing structure being sought, not commitments in hand.</p>
+</section>
+
+<section id="tokenomics">
+  <div class="stage-eyebrow"><div class="stage-label">Ecosystem Utility</div></div>
+  <h2>DPR Token — Medium of Exchange &amp; Tokenomics</h2>
+  <p class="body-text">The DPR Token is the native medium of exchange within the Delper ecosystem — not solely a value-accrual instrument. Residents receive their $247/month benefit (rent, food, and wallet credit components) in DPR Tokens, which circulate within the ecosystem: spent with local vendors and marketplace sellers (Stage 7), redeemed for platform services, or held as savings. Vendors and sellers who accept DPR Tokens settle supply chain fees and re-circulate tokens back through the ecosystem, creating a closed-loop economy alongside the token's role as a store of value.</p>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">1.98T</div><div class="lbl">Total Token Supply (Fixed)</div></div>
+    <div class="kpi"><div class="num">$633.30</div><div class="lbl">Current Price (EV ÷ Supply)</div></div>
+    <div class="kpi"><div class="num">$1,253.94T</div><div class="lbl">Token Market Capitalisation</div></div>
+    <div class="kpi"><div class="num">$83</div><div class="lbl">Monthly Wallet Credit per Resident (DPR)</div></div>
+  </div>
+
+  <h2 style="font-size:1.1rem;margin-top:24px">Token Allocation</h2>
+  <table>
+    <thead><tr><th>Allocation</th><th>% of Supply</th><th>Tokens</th><th>Value at Current Price</th></tr></thead>
+    <tbody>
+      <tr><td>Founder &amp; Team (GK Bharta + core team)</td><td class="num">30%</td><td class="num">594.0B</td><td class="num g">$376.18T</td></tr>
+      <tr><td>Ecosystem Rewards Pool (resident wallet credits)</td><td class="num">35%</td><td class="num">693.0B</td><td class="num g">$438.88T</td></tr>
+      <tr><td>Public / Institutional Investors (IPO/FPO-linked)</td><td class="num">20%</td><td class="num">396.0B</td><td class="num g">$250.79T</td></tr>
+      <tr><td>Treasury &amp; Reserve (liquidity, contingency)</td><td class="num">10%</td><td class="num">198.0B</td><td class="num g">$125.39T</td></tr>
+      <tr><td>Strategic Partners &amp; Advisors</td><td class="num">5%</td><td class="num">99.0B</td><td class="num g">$62.70T</td></tr>
+    </tbody>
+  </table>
+  <p class="body-text">The Founder &amp; Team allocation (30%) is deliberately set to match GK Bharta's equity floor established in Stage 3 — token and equity positions are related, not independent, and are netted against each other in net worth calculations to avoid double-counting the same underlying value.</p>
+
+  <h2 style="font-size:1.1rem;margin-top:24px">Value Accrual Mechanism</h2>
+  <p class="body-text">Token price is derived directly from Terminal Enterprise Value: <strong>Price = EV ÷ 1.98T tokens</strong>, with no additional premiums layered on top. As platform net profit grows (Stages 6, 7, and 9), Terminal EV grows at 15× net profit, and token price grows proportionally — the same mechanism used throughout this programme's financial model, with no separate token-specific valuation formula.</p>
+
+  <p class="body-text flag">Two caveats worth stating plainly. First, a 1.98 trillion token supply is unusually large by real-world standards — most established tokens (Bitcoin: 21M, Ethereum: ~120M) use supplies many orders of magnitude smaller; the large supply here is a direct consequence of dividing an already-unverified Terminal EV by an arbitrary token count, not an independently-designed tokenomics decision. Second, an earlier version of this token price derivation used a broken "premium-stacking" formula (separate from the simple EV÷supply calculation) that produced a disconnected EV progression and a formatting bug displaying percentages instead of dollar prices — this has since been corrected to the simple methodology stated above, and that correction should be verified independently as part of Stage 4's PwC due diligence.</p>
+</section>
+
+<section id="ratios">
+  <div class="stage-eyebrow"><div class="stage-label">Consolidated Financial Ratios</div></div>
+  <h2>Key Ratios — By Segment</h2>
+  <table>
+    <thead><tr><th>Ratio</th><th>Value</th><th>Segment / Basis</th></tr></thead>
+    <tbody>
+      <tr><td>Smart City DSCR — commercial rate</td><td class="num g">1.61×</td><td>Phase 2, 13% rental yield, 65% LTV, 4.8%, 20yr</td></tr>
+      <tr><td>Smart City DSCR — NOI/TDS, FSG rate</td><td class="num g">2.01×</td><td>Phase 2, 13% rental yield, 95% LTV, 1.8%, 25yr</td></tr>
+      <tr><td>Phase 1 pilot DSCR (per country, any size)</td><td class="num g">2.01×</td><td>Scale-invariant — identical across all 195 pilots</td></tr>
+      <tr><td>Corporate/Programme DSCR — Year 21 actual</td><td class="num g">3.03×</td><td>Phase 2, full 5-stream revenue basis</td></tr>
+      <tr><td>Corporate/Programme DSCR — full steady-state</td><td class="num g">2.79×</td><td>Phase 2, terminal revenue basis</td></tr>
+      <tr><td>Debt-Equity Ratio — Year 21</td><td class="num a">5.00×</td><td>Phase 2, corporate balance sheet</td></tr>
+      <tr><td>Current Ratio — Year 21</td><td class="num g">7.19×</td><td>Phase 2, corporate balance sheet</td></tr>
+      <tr><td>Return on Equity — Year 21</td><td class="num g">11.6%</td><td>Phase 2, PAT ÷ Equity</td></tr>
+      <tr><td>Return on Assets — Year 21</td><td class="num g">1.9%</td><td>Phase 2, PAT ÷ (LTD+Equity)</td></tr>
+      <tr><td>Interest Coverage — Year 21</td><td class="num g">445.27×</td><td>Phase 2, EBIT ÷ ESG Interest (MTN off-P&L)</td></tr>
+      <tr><td>Retrofit MTN DSCR (per city)</td><td class="num g">199,935×</td><td>Phase 2, project-level, at maturity</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="swot">
+  <div class="stage-eyebrow"><div class="stage-label">Risk Assessment</div></div>
+  <h2>SWOT Analysis</h2>
+  <div class="swot-grid">
+    <div class="swot-cell">
+      <h4 style="color:var(--green)">Strengths</h4>
+      <ul>
+        <li>Real, verified DSCR clearance at project level (2.01×) once 13% yield is applied</li>
+        <li>Diversified revenue streams (digital, supply chain, rental, retrofit, employment)</li>
+        <li>Concurrent Phase 1/Phase 2 structure allows small-scale proof before full commitment</li>
+        <li>Retrofit MTN economics independently strong (199,935× project DSCR)</li>
+      </ul>
+    </div>
+    <div class="swot-cell">
+      <h4 style="color:var(--red)">Weaknesses</h4>
+      <ul>
+        <li>Digital and supply chain terminal revenue figures unverified against real-world markets</li>
+        <li>13% smart city rental yield exceeds real-world commercial real estate benchmarks</li>
+        <li>City Timeline documentation incomplete (456 of 2,200 cities named)</li>
+        <li>Employment revenue model implies 4.4B jobs — exceeds global labour force</li>
+      </ul>
+    </div>
+    <div class="swot-cell">
+      <h4 style="color:var(--blue)">Opportunities</h4>
+      <ul>
+        <li>Genuine underserved demand for affordable smart-city housing globally</li>
+        <li>KYC-verified audience access is a real, growing premium ad category</li>
+        <li>Phase 1 pilot model de-risks initial government relationships before Phase 2 scale</li>
+        <li>PwC due diligence (Stage 4) can convert unverified figures into bankable ones</li>
+      </ul>
+    </div>
+    <div class="swot-cell">
+      <h4 style="color:var(--amber)">Threats</h4>
+      <ul>
+        <li>Zero of 195 + full-programme sovereign guarantees currently executed</li>
+        <li>Combined capital raise ($1,350.95T) vastly exceeds global bond market capacity</li>
+        <li>Revenue assumptions failing independent scrutiny could derail institutional financing</li>
+        <li>Real estate yield assumption in tension with "low-risk sovereign-guaranteed" framing used for financing</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <p>Illustrative planning document only. No capital has been raised, no guarantee executed, and no independent audit yet performed. Not a solicitation.</p>
+</footer>
+
+</body>
+</html>
